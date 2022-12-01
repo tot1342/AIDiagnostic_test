@@ -84,7 +84,7 @@ class Segmenter(LightningModule):
         mask_out = self(img)
         loss = self.dice(mask_out, target)
         tqdm_dict = {"train_loss": loss}
-        # результат сохраняется для tensorbord
+        # результат сохраняется для tensorboard
         self.log("train_loss", loss)
         output = OrderedDict({"loss": loss, "progress_bar": tqdm_dict, "log": tqdm_dict})
         return output
@@ -95,14 +95,14 @@ class Segmenter(LightningModule):
         """
         img, target = batch
         mask_out = self(img)
-        # Добавляем в tensorbord примеры выхода модели
+        # Добавляем в tensorboard примеры выхода модели
         for i in range(mask_out.size(0)):
             im = make_grid([img[i]*0.25 + 0.49, mask_out[i], torch.unsqueeze(target[i], 0)])
             self.logger.experiment.add_image(f"im_{batch_idx}_{i}", im) 
         
         metric = 1 - self.dice(mask_out, target)
         tqdm_dict = {"val": metric}
-        # результат сохраняется для tensorbord
+        # результат сохраняется для tensorboard
         self.log("val", metric)
         output = OrderedDict({"val": metric, "progress_bar": tqdm_dict, "log": tqdm_dict})
         return output
