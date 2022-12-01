@@ -84,6 +84,7 @@ class Segmenter(LightningModule):
         mask_out = self(img)
         loss = self.dice(mask_out, target)
         tqdm_dict = {"train_loss": loss}
+        # результат сохраняется для tensorbord
         self.log("train_loss", loss)
         output = OrderedDict({"loss": loss, "progress_bar": tqdm_dict, "log": tqdm_dict})
         return output
@@ -101,6 +102,7 @@ class Segmenter(LightningModule):
         
         metric = 1 - self.dice(mask_out, target)
         tqdm_dict = {"val": metric}
+        # результат сохраняется для tensorbord
         self.log("val", metric)
         output = OrderedDict({"val": metric, "progress_bar": tqdm_dict, "log": tqdm_dict})
         return output
